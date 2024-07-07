@@ -1,0 +1,83 @@
+import tkinter as tk
+import random
+
+class RockPaperScissors:
+    def __init__(self):
+        self.window = tk.Tk()
+        self.window.title("Rock, Paper, Scissors")
+        self.window.geometry("600x600")
+        self.window.configure(background="#f0f0f0")
+
+        self.title_label = tk.Label(self.window, text="Rock, Paper, Scissors", font=("Times", 24, "bold"), bg="silver")
+        self.title_label.pack(pady=20)
+
+        self.user_choice_var = tk.StringVar()
+        self.user_choice_var.set("Rock")
+
+        self.choice_frame = tk.Frame(self.window, bg="white")
+        self.choice_frame.pack(pady=20)
+
+        self.rock_radio = tk.Radiobutton(self.choice_frame, text="✊ Rock", variable=self.user_choice_var, value="Rock", font=("Times", 18), bg="white")
+        self.rock_radio.pack(side=tk.LEFT, padx=10)
+
+        self.paper_radio = tk.Radiobutton(self.choice_frame, text="✋ Paper", variable=self.user_choice_var, value="Paper", font=("Times", 18), bg="white")
+        self.paper_radio.pack(side=tk.LEFT, padx=10)
+
+        self.scissors_radio = tk.Radiobutton(self.choice_frame, text="✌ Scissors", variable=self.user_choice_var, value="Scissors", font=("Times", 18), bg="white")
+        self.scissors_radio.pack(side=tk.LEFT, padx=10)
+
+        self.play_button = tk.Button(self.window, text="Play", command=self.play_game, font=("Times", 18), bg="blue", fg="white")
+        self.play_button.pack(pady=20)
+
+        self.result_label = tk.Label(self.window, text="", font=("Times", 18), bg="#f0f0f0")
+        self.result_label.pack(pady=20)
+
+        self.score_label = tk.Label(self.window, text="Score: 0-0", font=("Times", 18), bg="#f0f0f0")
+        self.score_label.pack(pady=20)
+
+        self.play_again_button = tk.Button(self.window, text="Play Again", command=self.play_again, font=("Times", 18), bg="blue", fg="white", state="disabled")
+        self.play_again_button.pack(pady=20)
+
+        self.user_score = 0
+        self.computer_score = 0
+
+    def play_game(self):
+        user_choice = self.user_choice_var.get()
+        computer_choice = random.choice(["Rock", "Paper", "Scissors"])
+
+        if user_choice == computer_choice:
+            result = "TIE"
+        elif (user_choice == "Rock" and computer_choice == "Scissors") or \
+             (user_choice == "Scissors" and computer_choice == "Paper") or \
+             (user_choice == "Paper" and computer_choice == "Rock"):
+            result = "YOU WIN!"
+            self.user_score += 1
+        else:
+            result = "COMPUTER WINS!"
+            self.computer_score += 1
+
+        self.result_label.configure(text=f"Computer chose: {self.get_hand_emoji(computer_choice)} {computer_choice}\n{result}")
+        self.score_label.configure(text=f"Score: {self.user_score}-{self.computer_score}")
+        self.play_button.configure(state="disabled")
+        self.play_again_button.configure(state="normal")
+
+    def play_again(self):
+        self.result_label.configure(text="")
+        self.user_choice_var.set("Rock")
+        self.play_button.configure(state="normal")
+        self.play_again_button.configure(state="disabled")
+
+    def get_hand_emoji(self, choice):
+        if choice == "Rock":
+            return "✊"
+        elif choice == "Paper":
+            return "✋"
+        else:
+            return "✌"
+
+    def run(self):
+        self.window.mainloop()
+
+if __name__ == "__main__":
+    game = RockPaperScissors()
+    game.run()
